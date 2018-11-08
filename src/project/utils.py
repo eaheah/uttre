@@ -1,4 +1,5 @@
 import os
+import pickle
 from tensorflow import keras
 from random import shuffle
 
@@ -119,3 +120,36 @@ def md(directory):
 
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+def get_pickled_partition(amount='all', padding='padding3'):
+    path = f'data_partitions/{padding}/partition_{amount}.pkl'
+    with open(path, 'rb') as f:
+        return pickle.load(f)
+
+
+if __name__ == '__main__':
+    
+    data_partition_dir = 'data_partitions'
+    for subdirectory in ('nopadding', 'padding1', 'padding2', 'padding3', 'padding4', 'padding5'):
+        p = os.path.join(data_partition_dir, subdirectory)
+        print(p)
+        datapath = os.path.join('/vagrant/imgs/training_data2', subdirectory)
+        print(datapath)
+
+        for amount in (100, 1000, 100000, 'all'):
+            partition = create_partition(amount=amount, datapath=datapath)
+            out_path = os.path.join(p, 'partition_{}.pkl'.format(amount))
+            with open(out_path, 'wb') as f:
+                pickle.dump(partition, f)
+
+    # with open('data_partitions/nopadding/partition_all.pkl', 'rb') as f:
+    #     print(pickle.load(f).keys())
+
+    # print()
+
+    # with open('data_partitions/padding5/partition_all.pkl', 'rb') as f:
+    #     print(pickle.load(f).keys())
+
+
+
+

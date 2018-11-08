@@ -55,7 +55,6 @@ class DataGenerator(keras.utils.Sequence):
             image_path = image_path.replace('png', 'jpg')
         row = self.df.loc[self.df['image_id'] == image_path]
         label = np.array(row.values.tolist()[0][1:])
-#         print("label: {}".format(d))
         label[label < 0] = 0
         return label
 
